@@ -6,7 +6,8 @@ gem 'rails', '3.2.6'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2'
-
+gem 'ruby-oci8'
+gem 'activerecord-oracle_enhanced-adapter', '1.3.2'
 
 
 # To use ActiveModel has_secure_password
