@@ -15,7 +15,7 @@ class BalanceUpdater
       if p
         p.balance_daily = balance_row[1]
         p.fk_ssmUserId = nil if p.fk_ssmUserId == 0
-        Rails.logger.info("Balance updated for Person #{p.id} (#{p.firstName.to_s + " " + p.lastName.to_s}):  #{p.changes}")
+        Rails.logger.info("Balance updated for Person #{p.id} (#{p.firstName.to_s + " " + p.lastName.to_s}):  #{p.changes}") if p.changed?
         p.save!(:validate => false)
       end
     end
