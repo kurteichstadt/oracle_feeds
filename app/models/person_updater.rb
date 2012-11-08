@@ -6,7 +6,7 @@ class PersonUpdater
 
   def update_people
     Rails.logger.info("Updating Staff/Person records from PS...")
-    update_staff_records
+#    update_staff_records
     update_person_records
     Rails.logger.info("Done!")
   end
@@ -261,12 +261,12 @@ class PersonUpdater
 
 
   def update_person_records
-    staffs = Staff.where("removedFromPeopleSoft <> 'Y'").includes(:primary_address, :secondary_address, :person => [:current_address, :permanent_address])
-    staffs.each do |staff|
-      unless staff.person
-        find_or_create_person(staff)
-      end
-      update_person_attributes(staff)
+    Staff.where("removedFromPeopleSoft <> 'Y'").includes(:primary_address, :secondary_address, :person => [:current_address, :permanent_address, :email_addresses, :phone_numbers])
+      .find_each do |staff|
+        unless staff.person
+          find_or_create_person(staff)
+        end
+        update_person_attributes(staff)
     end
   end
 
@@ -363,6 +363,12 @@ class PersonUpdater
     permanent_address = person.permanent_address
     mailing_address = staff.secondary_address
     push_address(mailing_address, permanent_address, staff);
+    
+    person.primary_email_address = staff.email if !staff.email.blank?
+    
+    person.set_phone_number(staff.homePhone, "home", true) if !staff.homePhone.blank?
+    person.set_phone_number(staff.workPhone, "work", true) if !staff.workPhone.blank?
+    person.set_phone_number(staff.mobilePhone, "mobile", true) if !staff.mobilePhone.blank?
   end
 
   def push_address(staff_address, person_address, staff)
