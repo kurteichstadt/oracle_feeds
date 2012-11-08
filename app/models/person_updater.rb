@@ -6,7 +6,7 @@ class PersonUpdater
 
   def update_people
     Rails.logger.info("Updating Staff/Person records from PS...")
-#    update_staff_records
+    update_staff_records
     update_person_records
     Rails.logger.info("Done!")
   end
